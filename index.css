@@ -30,6 +30,10 @@ header {
   margin-bottom: 2rem;
 }
 
+.text-green {
+  color: #016962;
+}
+
 header h1 {
   font-size: 2.8rem;
   font-weight: 700;
@@ -61,19 +65,21 @@ section {
 }
 
 .about {
-  background: rgba(255,255,255,0.96);
+  background: rgba(255,255,255,0.60); /* slightly more transparent */
   border-radius: 18px;
   padding: 2.2rem 2rem;
   margin-bottom: 2.5rem;
   box-shadow: 0 2px 16px rgba(5,172,162,0.07);
   align-items: center;
-  font-size: 1.08rem;
+  font-size: 0.5rem;
   color: #222;
   max-width: 700px;
   margin-left: auto;
   margin-right: auto;
   text-align: left;
   line-height: 1.7;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
 }
 
 .about p {
@@ -152,8 +158,8 @@ footer {
     border-radius: 0 0 16px 16px;
   }
   header img {
-    max-width: 120px;
-    width: 80vw;
+    max-width: 400px;
+    width: 90vw;
   }
   section {
     padding: 1.5rem 0.5rem;
