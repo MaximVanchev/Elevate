@@ -2,7 +2,7 @@ const slideContainer = document.getElementById('slideContainer');
 const slides = slideContainer.querySelectorAll('img');
 const prevBtn = document.getElementById('prev');
 const nextBtn = document.getElementById('next');
-const totalSlides = slides.length;
+const totalSlides = slides.length / 2;
 let currentIndex = 0;
 let interval;
 
