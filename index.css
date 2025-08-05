@@ -409,6 +409,7 @@ footer {
   height: 100%;
   object-fit: cover; /* Ensures images fill the area without stretching */
   flex-shrink: 0;
+  display: block;
 }
 
 .nav {
@@ -451,9 +452,10 @@ footer {
   .carousel {
     overflow-x: auto;
     width: 95%;
-    height: 500px;
+    height: 100%;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
+    position: relative;
   }
 
   .nav {
@@ -462,11 +464,32 @@ footer {
 
   .nav-mobile {
     display:flex;
-    color: white;
-    width: 20px;
-    height: 20px;
-    background-color: #016962;
+    position: absolute;
+    gap: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    justify-content: center;
+    z-index: 10;
+    margin-top: -10%;
   }
+
+  .carousel-about {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .nav-mobile button {
+    width: 0.9rem;
+    height: 0.9rem;
+    background-color:#979797;
+    border-radius: 4rem;
+    border: none;
+  }
+
+  .nav-mobile button.active {
+    background-color:#05ACA2;
+}
 
   .carousel-item {
     scroll-snap-align: start;
@@ -487,7 +510,6 @@ footer {
   justify-content: center;
   gap: 1rem;
   margin-bottom: 1rem;
-  
 }
 
 .language-selector button {

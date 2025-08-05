@@ -2,7 +2,7 @@ const slideContainer = document.getElementById('slideContainer');
 const slides = slideContainer.querySelectorAll('img');
 const prevBtn = document.getElementById('prev');
 const nextBtn = document.getElementById('next');
-const totalSlides = slides.length / 2;
+const totalSlides = slides.length;
 let currentIndex = 0;
 let interval;
 
@@ -100,3 +100,30 @@ document.addEventListener('DOMContentLoaded', () => {
     setLanguage(savedLang);
   }
 });
+//Mobile Slider
+const carousel = document.getElementById('mobileCaroselContainer');
+  const slidesMobile = document.querySelectorAll('.carousel-item');
+  const dots = document.querySelectorAll('.nav-mobile button');
+
+  function setActiveDot(index) {
+    dots.forEach(dot => dot.classList.remove('active'));
+    if (dots[index]) dots[index].classList.add('active');
+  }
+
+  // Update dot on scroll/swipe
+  carousel.addEventListener('scroll', () => {
+    const scrollLeft = carousel.scrollLeft;
+    const slideWidth = carousel.offsetWidth;
+    const index = Math.round(scrollLeft / slideWidth);
+    setActiveDot(index);
+  });
+
+  // Dot click navigation
+  dots.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+      slidesMobile[index].scrollIntoView({ behavior: 'smooth', inline: 'start' });
+    });
+  });
+
+  // Initialize
+  setActiveDot(0);
