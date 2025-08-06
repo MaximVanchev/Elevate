@@ -456,6 +456,9 @@ footer {
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     position: relative;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    .carousel::-webkit-scrollbar { display: none; }
   }
 
   .nav {
@@ -493,7 +496,8 @@ footer {
 
   .carousel-item {
     scroll-snap-align: start;
-    align-items: center;
+    width: 100%;
+    flex-shrink: 0;
   }
 
   .carousel-pc {

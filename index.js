@@ -101,29 +101,106 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 //Mobile Slider
-const carousel = document.getElementById('mobileCaroselContainer');
-  const slidesMobile = document.querySelectorAll('.carousel-item');
-  const dots = document.querySelectorAll('.nav-mobile button');
+function getScrollContainer() {
+  return window.innerWidth <= 600 ? 
+      document.querySelector('.carousel') : 
+      document.getElementById('mobileCarouselContainer');
+}
 
-  function setActiveDot(index) {
-    dots.forEach(dot => dot.classList.remove('active'));
-    if (dots[index]) dots[index].classList.add('active');
-  }
+function getSlides() {
+  return window.innerWidth <= 600 ? 
+      document.querySelectorAll('.carousel-mobile .carousel-item') : 
+      document.querySelectorAll('.carousel-item');
+}
 
-  // Update dot on scroll/swipe
-  carousel.addEventListener('scroll', () => {
-    const scrollLeft = carousel.scrollLeft;
-    const slideWidth = carousel.offsetWidth;
-    const index = Math.round(scrollLeft / slideWidth);
-    setActiveDot(index);
-  });
+const dots = document.querySelectorAll('.nav-mobile button');
+let isScrolling = false;
+
+function setActiveDot(index) {
+  dots.forEach(dot => dot.classList.remove('active'));
+  if (dots[index]) dots[index].classList.add('active');
+}
+
+function getCurrentSlideIndex() {
+  const carousel = getScrollContainer();
+  const slides = getSlides();
+  if (!carousel || !slides.length) return 0;
+  
+  const scrollLeft = carousel.scrollLeft;
+  const slideWidth = slides[0].offsetWidth;
+  return Math.round(scrollLeft / slideWidth);
+}
+
+function setupCarousel() {
+  const carousel = getScrollContainer();
+  const slides = getSlides();
+  
+  if (!carousel || !slides.length) return;
 
   // Dot click navigation
   dots.forEach((dot, index) => {
-    dot.addEventListener('click', () => {
-      slidesMobile[index].scrollIntoView({ behavior: 'smooth', inline: 'start' });
-    });
+      dot.addEventListener('click', () => {
+          const slideWidth = slides[0].offsetWidth;
+          carousel.scrollTo({
+              left: slideWidth * index,
+              behavior: 'smooth'
+          });
+      });
   });
 
   // Initialize
   setActiveDot(0);
+
+  // Throttle scroll events for better performance
+  function throttle(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+          const later = () => {
+              clearTimeout(timeout);
+              func(...args);
+          };
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+      };
+  }
+
+  // Update dot on scroll/swipe with throttling
+  const handleScroll = throttle(() => {
+      if (!isScrolling) {
+          const currentIndex = getCurrentSlideIndex();
+          setActiveDot(currentIndex);
+      }
+  }, 100);
+
+  carousel.addEventListener('scroll', handleScroll);
+
+  // Handle smooth scrolling state
+  carousel.addEventListener('scrollstart', () => {
+      isScrolling = true;
+  });
+
+  carousel.addEventListener('scrollend', () => {
+      isScrolling = false;
+      const currentIndex = getCurrentSlideIndex();
+      setActiveDot(currentIndex);
+  });
+
+  // Fallback for browsers that don't support scrollend
+  let scrollTimeout;
+  carousel.addEventListener('scroll', () => {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+          isScrolling = false;
+          const currentIndex = getCurrentSlideIndex();
+          setActiveDot(currentIndex);
+      }, 150);
+  });
+}
+
+// Initialize carousel
+setupCarousel();
+
+// Reinitialize on window resize to handle responsive changes
+window.addEventListener('resize', () => {
+  setTimeout(setupCarousel, 100);
+});
