@@ -532,3 +532,139 @@ footer {
   background: #05ACA2;
   color: white;
 }
+
+/* Video Carousel Styles */
+.carousel-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+}
+
+.carousel-video {
+  position: relative;
+  width: 80%;
+  max-width: 700px;
+  height: 400px;
+  margin: 50px auto;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  background: #000;
+}
+
+.slides-video {
+  display: flex;
+  height: 100%;
+  transition: transform 1.5s ease-in-out;
+}
+
+.slides-video video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  flex-shrink: 0;
+  display: block;
+  background: #000;
+}
+
+.nav-video {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+  padding: 0 20px;
+  z-index: 10;
+}
+
+.nav-video button {
+  background-color: rgba(0,0,0,0.5);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 24px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.nav-video button:hover {
+  background-color: rgba(0,0,0,0.8);
+}
+
+.carousel-video-pc {
+  display: flex;
+}
+
+.carousel-video-mobile {
+  display: none;
+}
+
+.nav-mobile-video {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .carousel-video {
+    overflow-x: auto;
+    width: 95%;
+    height: auto;
+    min-height: 300px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .carousel-video::-webkit-scrollbar { 
+    display: none; 
+  }
+
+  .nav-video {
+    display: none;
+  }
+
+  .nav-mobile-video {
+    display: flex;
+    position: relative;
+    gap: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    justify-content: center;
+    z-index: 10;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .nav-mobile-video button {
+    width: 0.9rem;
+    height: 0.9rem;
+    background-color: #979797;
+    border-radius: 4rem;
+    border: none;
+  }
+
+  .nav-mobile-video button.active {
+    background-color: #05ACA2;
+  }
+
+  .carousel-video-item {
+    scroll-snap-align: start;
+    width: 100%;
+    flex-shrink: 0;
+  }
+
+  .carousel-video-pc {
+    display: none;
+  }
+
+  .carousel-video-mobile {
+    display: flex;
+  }
+
+  .carousel-title {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+  }
+}

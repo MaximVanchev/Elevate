@@ -61,6 +61,7 @@ const translations = {
     "text-two": "<ul><li><strong>Ще работиш рамо до рамо с вдъхновяващи ментори:</strong> От Publicis и отвъд. Хора с визия, които ще ти помогнат да откриеш твоята</li><li><strong>Гъвкав формат:</strong> Програмата включва 5 индивидуални срещи в рамките на 4 месеца, изцяло съобразени с твоите цели и амбиции</li><li><strong>Тук няма общи съвети:</strong> Ще получиш насока, която ти носи реална стойност и развитие със смисъл</li><li><strong>Местата са ограничени:</strong> Само 12 участници ще станат част от програмата</li></ul>",
     "title-three": "Запознай се с менторите",
     "text-three": "Избрахме ментори, които познават пътя ни отвътре – професионалисти, които и днес вървят рамо до рамо с нас и са били до нас в ключови моменти през годините. Общото между всички е вярата им в силата на споделения опит – с уважение, човечност и стремеж към развитие.",
+    "title-videos": "Видео отзиви",
     "title-four": "Как протича програмата?",
     "text-four": "<ol><li><strong>Кандидатствай до 17 август -</strong> Изпращаш мотивацията си. Ние търсим смелите, търсещите и любопитните</li><li><strong>Свързваме те с правилния ментор -</strong> Селектираме всяка двойка така, че да има истинска химия между вашите цели и посоки</li><li><strong>Официален старт –</strong> На откриващата среща залагаме основите и планираме хода на програмата.</li><li><strong>Менторство в действие –</strong> Очакват те 5 персонални сесии за 4 месеца – фокусирани, адаптирани към теб, с реална стойност и обратна връзка</li><li><strong>Заключителна среща –</strong> На последната среща обсъждаме резултатите и планираме бъдещето</li></ol>",
     "text-five": "Означава учене от реалния свят, менторство от лидери в индустрията и подготовка на лидери. Но този път – вътрешно. Създадено от и за хората на Publicis Groupe Bulgaria.",
@@ -73,8 +74,7 @@ const translations = {
     "title-two": "Why join?",
     "text-two": "<ul><li><strong>You'll work side by side with inspiring mentors:</strong> From Publicis and beyond. People with vision who will help you discover yours.</li><li><strong>Flexible format:</strong> The program includes 5 individual sessions over 4 months, fully aligned with your goals and ambitions.</li><li><strong>No generic advice here:</strong> You will receive guidance that brings real value and meaningful development.</li><li><strong>Limited spots:</strong> Only 12 participants will join the program.</li></ul>",
     "title-three": "Meet the Mentors",
-    "text-three": "We’ve selected mentors who know our journey from within — professionals who still walk alongside us and have been there for us during key moments over the years. What unites them is their belief in the power of shared experience — with respect, humanity, and a desire for continuous growth.",
-    "title-four": "How does the program work?",
+    "text-three": "We’ve selected mentors who know our journey from within — professionals who still walk alongside us and have been there for us during key moments over the years. What unites them is their belief in the power of shared experience — with respect, humanity, and a desire for continuous growth.",    "title-videos": "Video Testimonials",    "title-four": "How does the program work?",
     "text-four": "<ol><li><strong>Apply by August 17 –</strong> Send us your motivation. We are looking for the bold, curious, and eager to grow.</li><li><strong>We match you with the right mentor –</strong> We carefully select each pair to ensure a real connection between your goals and directions.</li><li><strong>Official start –</strong> At the kick-off meeting, we lay the foundations and plan the program journey.</li><li><strong>Mentorship in action –</strong> You'll have 5 personal sessions over 4 months — focused, tailored to you, with real value and feedback.</li><li><strong>Closing meeting –</strong> In the final session, we’ll discuss the results and plan for the future.</li></ol>",
     "text-five": "It means learning from the real world, mentorship from industry leaders, and developing future leaders. But this time — from within. Created by and for the people of Publicis Groupe Bulgaria.",
     "sports-message": "Only 12 spots available!"
@@ -203,4 +203,197 @@ setupCarousel();
 // Reinitialize on window resize to handle responsive changes
 window.addEventListener('resize', () => {
   setTimeout(setupCarousel, 100);
+});
+
+// Video Carousel
+const videoSlideContainer = document.getElementById('videoSlideContainer');
+const videoSlides = videoSlideContainer.querySelectorAll('video');
+const prevVideoBtn = document.getElementById('prevVideo');
+const nextVideoBtn = document.getElementById('nextVideo');
+const totalVideoSlides = videoSlides.length / 2; // Desktop and mobile versions
+let currentVideoIndex = 0;
+let videoInterval;
+
+function goToVideoSlide(index) {
+  // Pause all videos
+  videoSlides.forEach(video => {
+    video.pause();
+    video.currentTime = 0;
+  });
+  
+  videoSlideContainer.style.transform = `translateX(-${index * 100}%)`;
+  currentVideoIndex = index;
+}
+
+function nextVideoSlide() {
+  const newIndex = (currentVideoIndex + 1) % totalVideoSlides;
+  goToVideoSlide(newIndex);
+}
+
+function prevVideoSlide() {
+  const newIndex = (currentVideoIndex - 1 + totalVideoSlides) % totalVideoSlides;
+  goToVideoSlide(newIndex);
+}
+
+function startVideoAutoSlide() {
+  videoInterval = setInterval(nextVideoSlide, 15000);
+}
+
+function stopVideoAutoSlide() {
+  clearInterval(videoInterval);
+}
+
+// Event listeners for video carousel
+if (prevVideoBtn && nextVideoBtn) {
+  nextVideoBtn.addEventListener('click', () => {
+    stopVideoAutoSlide();
+    nextVideoSlide();
+    startVideoAutoSlide();
+  });
+
+  prevVideoBtn.addEventListener('click', () => {
+    stopVideoAutoSlide();
+    prevVideoSlide();
+    startVideoAutoSlide();
+  });
+
+  // Pause auto-slide when user interacts with video
+  videoSlides.forEach(video => {
+    video.addEventListener('play', stopVideoAutoSlide);
+    video.addEventListener('pause', () => {
+      if (!video.ended) {
+        stopVideoAutoSlide();
+      }
+    });
+  });
+
+  // Start video autoplay
+  const carouselVideoMobile = document.getElementById('mobileVideoCarouselContainer');
+  if (carouselVideoMobile && carouselVideoMobile.style.display !== 'none') {
+    // Mobile - use scroll navigation
+  } else {
+    startVideoAutoSlide();
+  }
+}
+
+// Mobile Video Slider
+function getVideoScrollContainer() {
+  return window.innerWidth <= 600 ? 
+      document.querySelector('.carousel-video') : 
+      document.getElementById('mobileVideoCarouselContainer');
+}
+
+function getVideoSlides() {
+  return window.innerWidth <= 600 ? 
+      document.querySelectorAll('.carousel-video-mobile .carousel-video-item') : 
+      document.querySelectorAll('.carousel-video-item');
+}
+
+const videoDots = document.querySelectorAll('.nav-mobile-video button');
+let isVideoScrolling = false;
+
+function setActiveVideoDot(index) {
+  videoDots.forEach(dot => dot.classList.remove('active'));
+  if (videoDots[index]) videoDots[index].classList.add('active');
+}
+
+function getCurrentVideoSlideIndex() {
+  const carouselVideo = getVideoScrollContainer();
+  const videoSlidesElements = getVideoSlides();
+  if (!carouselVideo || !videoSlidesElements.length) return 0;
+  
+  const scrollLeft = carouselVideo.scrollLeft;
+  const slideWidth = videoSlidesElements[0].offsetWidth;
+  return Math.round(scrollLeft / slideWidth);
+}
+
+function setupVideoCarousel() {
+  const carouselVideo = getVideoScrollContainer();
+  const videoSlidesElements = getVideoSlides();
+  
+  if (!carouselVideo || !videoSlidesElements.length) return;
+
+  // Dot click navigation
+  videoDots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+          // Pause all videos
+          videoSlidesElements.forEach(video => {
+            video.pause();
+          });
+          
+          const slideWidth = videoSlidesElements[0].offsetWidth;
+          carouselVideo.scrollTo({
+              left: slideWidth * index,
+              behavior: 'smooth'
+          });
+      });
+  });
+
+  // Initialize
+  setActiveVideoDot(0);
+
+  // Throttle scroll events for better performance
+  function throttleVideo(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+          const later = () => {
+              clearTimeout(timeout);
+              func(...args);
+          };
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+      };
+  }
+
+  // Update dot on scroll/swipe with throttling
+  const handleVideoScroll = throttleVideo(() => {
+      if (!isVideoScrolling) {
+          const currentIndex = getCurrentVideoSlideIndex();
+          setActiveVideoDot(currentIndex);
+      }
+  }, 100);
+
+  carouselVideo.addEventListener('scroll', handleVideoScroll);
+
+  // Handle smooth scrolling state
+  carouselVideo.addEventListener('scrollstart', () => {
+      isVideoScrolling = true;
+  });
+
+  carouselVideo.addEventListener('scrollend', () => {
+      isVideoScrolling = false;
+      const currentIndex = getCurrentVideoSlideIndex();
+      setActiveVideoDot(currentIndex);
+  });
+
+  // Fallback for browsers that don't support scrollend
+  let scrollTimeoutVideo;
+  carouselVideo.addEventListener('scroll', () => {
+      clearTimeout(scrollTimeoutVideo);
+      scrollTimeoutVideo = setTimeout(() => {
+          isVideoScrolling = false;
+          const currentIndex = getCurrentVideoSlideIndex();
+          setActiveVideoDot(currentIndex);
+      }, 150);
+  });
+
+  // Pause videos when scrolling away
+  carouselVideo.addEventListener('scroll', () => {
+    videoSlidesElements.forEach(video => {
+      const rect = video.getBoundingClientRect();
+      const carouselRect = carouselVideo.getBoundingClientRect();
+      const isVisible = rect.left >= carouselRect.left && rect.right <= carouselRect.right;
+      if (!isVisible && !video.paused) {
+        video.pause();
+      }
+    });
+  });
+}
+
+// Initialize video carousel
+setupVideoCarousel();
+
+// Reinitialize on window resize to handle responsive changes
+window.addEventListener('resize', () => {
+  setTimeout(setupVideoCarousel, 100);
 });
